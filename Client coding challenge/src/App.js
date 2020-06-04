@@ -8,22 +8,55 @@ class App extends React.Component{
   constructor( props ){
     super( props );
     this.state = {
-      /*
-        Your code goes here
-      */
+      apiUrl : "https://www.googleapis.com/books",
+      response : {}
     }
   }
 
-  /* 
-    Your code goes here
-  */
+  handleSearch = (event) => {
+    event.preventDefault();
+
+    const searchTerm = event.currentTarget.searchBox.value;
+
+    const url = `${this.state.apiUrl}/v1/volumes?q=${searchTerm}`;
+
+    const settings = {
+      method : 'GET'
+    };
+
+    fetch(url, settings)
+      .then(response => {
+        if( response.ok ){
+          return response.json();
+        }
+        throw new Error( response.statusText );
+      })
+      .then( responseJSON => {
+        console.log(responseJSON);
+        this.state.response = responseJSON;
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  };
 
   render(){
     return(
       <div>
-        {/* 
-          Your code goes here
-        */}
+        <form onSubmit={this.handleSearch}>
+          <div>
+            <input type="text" name="searchBox" id="searchBox"/>
+          </div>
+          <button type="submit">
+            Search
+          </button>
+        </form>
+        <section>
+          
+        </section>
+        <p>
+
+        </p>
       </div>
     )
   }
